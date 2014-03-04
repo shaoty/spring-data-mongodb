@@ -17,7 +17,9 @@ package org.springframework.data.mongodb.config;
 
 import java.lang.annotation.Annotation;
 
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
@@ -86,8 +88,11 @@ class MongoAuditingRegistrar extends AuditingBeanDefinitionRegistrarSupport {
 		Assert.notNull(auditingHandlerDefinition, "BeanDefinition must not be null!");
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null!");
 
+		BeanDefinitionBuilder.rootBeanDefinition(ObjectFactoryCreatingFactoryBean.class);
+
 		registerInfrastructureBeanWithId(BeanDefinitionBuilder.rootBeanDefinition(AuditingEventListener.class)
-				.addConstructorArgValue(auditingHandlerDefinition).getRawBeanDefinition(),
+		// .addConstructorArgValue(auditingHandlerDefinition)
+				.setAutowireMode(AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR).getRawBeanDefinition(),
 				AuditingEventListener.class.getName(), registry);
 	}
 

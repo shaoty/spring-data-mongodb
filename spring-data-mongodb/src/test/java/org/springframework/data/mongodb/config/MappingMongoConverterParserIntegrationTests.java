@@ -87,7 +87,7 @@ public class MappingMongoConverterParserIntegrationTests {
 	@Test
 	public void activatesAbbreviatingPropertiesCorrectly() {
 
-		BeanDefinition definition = factory.getBeanDefinition("abbreviatingConverter.mappingContext");
+		BeanDefinition definition = factory.getBeanDefinition("abbreviatingConverter.mongoMappingContext");
 		Object value = definition.getPropertyValues().getPropertyValue("fieldNamingStrategy").getValue();
 
 		assertThat(value, is(instanceOf(BeanDefinition.class)));

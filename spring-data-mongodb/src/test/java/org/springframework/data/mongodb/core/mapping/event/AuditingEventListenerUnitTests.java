@@ -23,6 +23,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.auditing.IsNewAwareAuditingHandler;
 import org.springframework.data.mapping.context.MappingContextIsNewStrategyFactory;
@@ -52,7 +54,13 @@ public class AuditingEventListenerUnitTests {
 		doNothing().when(handler).markCreated(Mockito.any(Object.class));
 		doNothing().when(handler).markModified(Mockito.any(Object.class));
 
-		listener = new AuditingEventListener(handler);
+		listener = new AuditingEventListener(new ObjectFactory<IsNewAwareAuditingHandler>() {
+
+			@Override
+			public IsNewAwareAuditingHandler getObject() throws BeansException {
+				return handler;
+			}
+		});
 	}
 
 	@Test(expected = IllegalArgumentException.class)
